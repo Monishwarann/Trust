@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 
 // Routes
 const apiRoutes = require('./routes/api');
-app.use('/api', apiRoutes);
+app.use('/_/backend', apiRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -82,8 +82,8 @@ const Scanner = ({ user }) => {
       // Backend URL - Uses relative path for Vercel compatibility
       const allergyList = user.allergies.join(',');
       const apiUrl = window.location.hostname === 'localhost' 
-        ? `http://localhost:5000/api/scan/${barcode}?allergies=${allergyList}`
-        : `/api/scan/${barcode}?allergies=${allergyList}`;
+        ? `http://localhost:5000/_/backend/scan/${barcode}?allergies=${allergyList}`
+        : `/_/backend/scan/${barcode}?allergies=${allergyList}`;
         
       const response = await axios.get(apiUrl);
       const data = response.data;
