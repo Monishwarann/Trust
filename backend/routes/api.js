@@ -10,7 +10,11 @@ router.get('/scan/:barcode', async (req, res) => {
   try {
     // 1. Fetch product from Open Food Facts
     const offUrl = `https://world.openfoodfacts.org/api/v2/product/${barcode}.json`;
-    const response = await axios.get(offUrl);
+    const response = await axios.get(offUrl, {
+      headers: {
+        'User-Agent': 'TrustBite - Web - Version 1.0 - https://trustbite.example.com'
+      }
+    });
 
     if (response.data.status === 0) {
       return res.status(404).json({ message: 'Product not found' });
@@ -66,8 +70,4 @@ router.get('/scan/:barcode', async (req, res) => {
     res.status(500).json({ message: 'Error processing scan' });
   }
 });
-
-module.exports = router;
-
-
 module.exports = router;

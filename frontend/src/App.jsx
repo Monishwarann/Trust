@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Scan, User, LayoutDashboard, Settings, Bell } from 'lucide-react';
+import { Scan, User, LayoutDashboard, Settings, Bell, Clock } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import Scanner from './components/Scanner';
 import Profile from './components/Profile';
+import History from './components/History';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -52,6 +53,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard user={currentUser} />} />
             <Route path="/scan" element={<Scanner user={currentUser} />} />
+            <Route path="/history" element={<History />} />
             <Route path="/profile" element={<Profile user={currentUser} setUser={setCurrentUser} />} />
           </Routes>
         </main>
@@ -69,25 +71,27 @@ function Navigation() {
   return (
     <nav>
       <Link to="/" className={`nav-item ${isActive('/') ? 'active' : ''}`}>
-        <LayoutDashboard size={20} />
+        <LayoutDashboard size={24} />
         <span>Home</span>
       </Link>
-      <Link to="/scan" className={`nav-item ${isActive('/scan') ? 'active' : ''}`}>
-        <div style={{ 
-          background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
-          color: 'white',
-          padding: '14px',
-          borderRadius: '16px',
-          marginTop: '-40px',
-          boxShadow: '0 8px 25px rgba(99, 102, 241, 0.6)',
-          border: '2px solid rgba(255, 255, 255, 0.2)'
-        }}>
-          <Scan size={26} />
-        </div>
+      <Link to="/history" className={`nav-item ${isActive('/history') ? 'active' : ''}`}>
+        <Clock size={24} />
+        <span>History</span>
       </Link>
+      
+      <Link to="/scan" className="nav-logo-btn">
+        <Scan size={32} strokeWidth={2.5} />
+        <span style={{ display: 'none' }}>Scanner</span>
+      </Link>
+
       <Link to="/profile" className={`nav-item ${isActive('/profile') ? 'active' : ''}`}>
-        <User size={20} />
+        <User size={24} />
         <span>Profile</span>
+      </Link>
+      
+      <Link to="/settings" className={`nav-item ${isActive('/settings') ? 'active' : ''}`} style={{ display: location.pathname === '/settings' ? 'flex' : 'none' }}>
+        <Settings size={24} />
+        <span>Settings</span>
       </Link>
     </nav>
   );
