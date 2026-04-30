@@ -65,9 +65,12 @@ router.get('/scan/:barcode', async (req, res) => {
       }
     });
 
-  } catch (error) {
-    console.error('Scan Error:', error);
-    res.status(500).json({ message: 'Error processing scan' });
-  }
+    } catch (error) {
+      console.error('Scan Error:', error.response?.data || error.message);
+      res.status(500).json({ 
+        message: 'Error processing scan', 
+        details: error.response?.data?.message || error.message 
+      });
+    }
 });
 module.exports = router;

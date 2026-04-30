@@ -16,7 +16,9 @@ const Scanner = ({ user }) => {
     // Check for barcode in URL parameters
     const params = new URLSearchParams(location.search);
     const barcode = params.get('barcode');
-    if (barcode) {
+    
+    // Only auto-scan if we have a barcode AND the user profile is loaded
+    if (barcode && user && !scanResult && !loading) {
       handleScan(barcode);
     }
 
@@ -25,7 +27,7 @@ const Scanner = ({ user }) => {
         scannerRef.current.stop().catch(err => console.error(err));
       }
     };
-  }, [location.search]);
+  }, [location.search, user]);
 
   const startCamera = async () => {
     setError(null);
@@ -72,7 +74,7 @@ const Scanner = ({ user }) => {
     setLoading(true);
     setError(null);
     try {
-      const allergyList = user.allergies.join(',');
+      const allergyList = (user && user.allergies) ? user.allergies.join(',') : '';
       const apiUrl = window.location.hostname === 'localhost' 
         ? `http://localhost:5000/_/backend/scan/${barcode}?allergies=${allergyList}`
         : `/_/backend/scan/${barcode}?allergies=${allergyList}`;
@@ -95,8 +97,9 @@ const Scanner = ({ user }) => {
       const updatedHistory = [newEntry, ...history].slice(0, 10);
       localStorage.setItem('trustbite_history', JSON.stringify(updatedHistory));
     } catch (err) {
-      setError('Product not found or error occurred.');
-      console.error(err);
+      const errorMsg = err.response?.data?.message || err.message;
+      setError(`Scan failed: ${errorMsg}`);
+      console.error('Frontend Scan Error:', err);
     } finally {
       setLoading(false);
     }
